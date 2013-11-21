@@ -43,7 +43,9 @@ class MBHTMLTable extends MBClass{
 		$cont.= $this->beginnTable();
 		$cont.= $this->renderHeaderRow();
 		
-		for($i=0;$i<$this->rows+1;$i++){
+		$c = ($this->makeHeader==true) ? $this->rows+1 : $this->rows;
+		
+		for($i=0;$i<$c;$i++){
 			$cont.=$this->renderRow();
 		}
 		
