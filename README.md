@@ -3,6 +3,7 @@ MBClass
 
 PHP Basic Helper Classes
 
+
 class.mbclass.php   > MBClass 
   
   Basisklasse aller folgenden Klassen.
@@ -13,15 +14,15 @@ class.timemath.php  > MBTimeMath
   
 class.mbdb.php      > MBDB
 
-  Wrapper-Klasse für die Mysql Implementierung in PHP. STellt Exception-Sichere Methoden bereit für den produktiven und entwicklungstechnischen Einsatz.
+  Wrapper-Klasse für die Mysql Implementierung in PHP. Stellt Exception-Sichere Methoden bereit für den produktiven und entwicklungstechnischen Einsatz.
   
 class.mbphpdebug.php  > MBPHPDebug
 
-  Erweiterung der Debug-Funktionen von der MBCass. Stell back tracing und memory tracking zur Verfügung.
+  Erweiterung der Debug-Funktionen von der MBCass. Stellt back tracing und memory tracking zur Verfügung.
   
 class.mbstringhelper.php  > MBStringHelper
 
-  Vermisste Funktionen im PHP-Strinh-Framework.
+  Vermisste Funktionen im PHP-String-Framework.
   
 class.mbhtmltable.php
 
