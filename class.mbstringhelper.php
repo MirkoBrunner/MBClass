@@ -60,6 +60,11 @@ class MBStringHelper extends MBClass{
 	*/
 	public function splitAtOffset($offset, $length, $string)
 	{
+		if(($string == NULL) || (!is_string($strign))) return false;
+		if((!is_numeric($length)) || ($length>=strlen($string)) || ($length<=0)) return false;
+		if((!is_numeric($offset)) || ($offset<0) ||  ($offset >= ($length-1))) return false;
+		
+		
 		$tmp = str_split($string);
 		$ret = array_slice($string, $offset, $length);
 		
