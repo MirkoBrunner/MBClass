@@ -53,10 +53,10 @@ class MBStringHelper extends MBClass{
 	
 	
 	/*! \brief Zerlegt den übergebenen String $strng in ein Array mit Offset $offset sowie der Länge $length und gibt das Array zurück.
-	/*  \param $string String die Zeichenkette die in ein Array zerlegt werden soll
-	/*  \param $offset Start Index des Array´s
-	/*  \param $length Länger des Array´s
-	/*  \return die zerlegte Zeichenkette
+	*   \param $string String die Zeichenkette die in ein Array zerlegt werden soll
+	*   \param $offset Start Index des Array´s
+	*   \param $length Länger des Array´s
+	*   \return die zerlegte Zeichenkette
 	*/
 	public function splitAtOffset($offset, $length, $string)
 	{
