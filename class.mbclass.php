@@ -174,5 +174,37 @@ class MBClass{
 		return $str;
 	}
 
+	
+	/* Validation stuff... */
+	public function testInt($int,$min=INT_MIN,$max=INT_MAX)
+	{
+		if(!is_numeric($int)) return false;
+		if($int<$min) return false;
+		if($int>$max) return false;
+		
+		return true;
+	}
+	
+	public function valInt($int, $min=INT_MIN, $max=INT_MAX, $clip=false, $ret=NULL)
+	{
+		if(!$this->testInt($int, $max, $min))
+		{
+			if(($ret!=NULL) && (is_numric($ret)) return $ret;
+			return false;
+		}
+		
+		if($clip===true) return $this->clipMinMax($int,$min,$max);
+		
+		return $int;
+	}
+
+	public function testString($string, $allowNoteNull=false)
+	{
+		if(!is_string($string)) return false;
+		if(($string=="") && ($allowNotNull===true)) return true;
+		
+	}
+	
+	
 }
 ?>
