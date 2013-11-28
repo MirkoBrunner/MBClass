@@ -202,6 +202,8 @@ class MBClass{
 	{
 		if(!is_string($string)) return false;
 		if(($string=="") && ($allowNotNull===true)) return true;
+		if($string<>"") return true;
+		return false;
 		
 	}
 	
