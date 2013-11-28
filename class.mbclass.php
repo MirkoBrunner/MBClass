@@ -205,6 +205,19 @@ class MBClass{
 		
 	}
 	
-	
+	public function saveSQLString($string)
+	{
+		if(!$this->testString($string)) return false;
+		if(function_exists('mysql_real_escape_string'))
+		{
+			return mysql_real_escape_string($string);
+		}
+		else
+		{
+			//needed help for preg_replace expression ;)
+			return false;
+		}
+		return false;
+	}
 }
 ?>
