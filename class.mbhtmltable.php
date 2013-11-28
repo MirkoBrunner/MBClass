@@ -87,7 +87,7 @@ class MBHTMLTable extends MBClass{
 		
 		$cont.='<tr '.cl.'`>';
 		
-		$df = function_exists('MBHTMLTable_renderHEaderCells', $args);
+		$df = function_exists('MBHTMLTable_renderHeaderCells', $args);
 		
 		for($i=0;$i<$count;$j++){
 			$cont.='<th '.$cr.'>';
@@ -139,7 +139,7 @@ class MBHTMLTable extends MBClass{
 		
 		$cr = ($this->tableClass!="") ? ('class="'.$this->tableClass.'"') : '';
 		
-		$cont.= '<table '.$cr.' border="02 cellspacing="0" cellpading="0">';
+		$cont.= '<table '.$cr.' border="0" cellspacing="0" cellpading="0">';
 		
 		return $cont;
 	}
