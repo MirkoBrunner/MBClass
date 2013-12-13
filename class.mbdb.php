@@ -3,8 +3,7 @@
 require_once('class.mbclass.php');
 
 // Wrapper for standard TCP connections
-class MBDB extends MBClass{
-	// !!! TODO: secure secure secure !!!
+class MBDB{
 	private $port;	
 	private $host;
 	private $user;		
@@ -12,7 +11,7 @@ class MBDB extends MBClass{
 	private $dbname;
 	private $linkid;
 	
-	public function __construct(){
+	public function __construct($access=NULL){
 		parent::__construct();
 		
 		//set to defaults
@@ -22,6 +21,8 @@ class MBDB extends MBClass{
 		$this->pass = NULL;
 		$this->dbname = NULL;
 		$this->linkid = NULL;
+		
+		$this->setAccessData($access);
 	}
 	
 	public function __destruct(){
@@ -29,14 +30,120 @@ class MBDB extends MBClass{
 		
 	}
 	
+	
 	// SET-FUNKTIONEN ---------------------
+	/*! \brief Setzen der Anmeldedaten führt aber keine Anmeldung durch. Gibt false zurück sollte das Array unvollständig sein.
+	*  	\param $access array\n
+	*	\brief Enthält die Anmeldedaten mit folgenden Keys: 'user', 'pass', 'host' und 'db' Optional ist 'port'.
+	*	\return bool\n
+	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
+	*/
+	public function setAccessData($access{
+		if(($access!=NULL) && (is_array($access))){
+			$chk = 0;
+			if(!array_key_exists('user', $access)) $chk++;
+			if(!array_key_exists('pass', $access)) $chk++;
+			if(!array_key_exists('host', $access)) $chk++;
+			if(!array_key_exists('db', $access)) $chk++;
+			
+			if($chk>0){
+				echo $this->err(0, 0, 'Ungültige Anmeldedaten');
+				return;
+			}
+			
+			$this->host =  $access['host'];
+			$this->user = $access['user'];
+			$this->pass = $access['pass'];
+			$this->dn = $access['db'];
+			
+			if(array_key_exists('port', $access)){
+				$this->port = $access['port'];
+			}
+			
+			return true;
+		}
+		return false;
+	}
+	
+	
+	/*! \brief setzen des User für die Anmeldung. Ist der Übergebene String leer oder nicht vom Typ String wird false geworfen.
+	*  	\param $user string\n
+	*	\brief der Nutzername für die Anmeldung
+	*	\return bool\n
+	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
+	*/
+	public function setUser($user)
+	{
+		if((!is_string($user)) return false;
+		$this->user = $user;
+		return true;
+	}
+	
+	
+	/*! \brief setzen des Passwortes für die Anmeldung. Ist der Übergebene String leer oder nicht vom Typ String wird false geworfen.
+	*  	\param $pass string\n
+	*	\brief das Passwort für die Anmeldung
+	*	\return bool\n
+	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
+	*/
+	public function setPass($pass)
+	{
+		if((!is_string($pass)) return false;
+		$this->pass = $pass;
+		return true;
+	}
+	
+	
+	/*! \brief setzen des Hosts für die Anmeldung. Ist der Übergebene String leer oder nicht vom Typ String wird false geworfen.
+	*  	\param $host string\n
+	*	\brief der Host für die Anmeldung
+	*	\return bool\n
+	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
+	*/
+	public function setHost($host)
+	{
+		if((!is_string($host)) return false;
+		$this->host = $host;
+		return true;
+	}
+	
+	
+	/*! \brief setzen des Datenbank-Namems für die Anmeldung. Ist der Übergebene String leer oder nicht vom Typ String wird false geworfen.
+	*  	\param $db string\n
+	*	\brief der DB-Name für die Anmeldung
+	*	\return bool\n
+	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
+	*/
+	public function setDB($db)
+	{
+		if((!is_string($db)) return false;
+		$this->db = $db;
+		return true;
+	}
+	
+	
+	/*! \brief setzen des Ports für die Anmeldung [Optional]. Ist der Übergebene String leer oder nicht vom Typ Integer wird false geworfen.
+	*  	\param $db string\n
+	*	\brief der Port für die Anmeldung
+	*	\return bool\n
+	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
+	*/
+	public function setPort($port)
+	{
+		if((!is_numeric($port) && (strlen($port)!==4)) return false;
+		$this->port = $port;
+		return true;
+	}
+	
+	
+	
 	/*! \brief setzen des Namens der Datenbank und versucht sich mit ihr zu verbinden.
 	*  	\param $dbname string\n
 	*	\brief der Name der Datenbank
 	*	\return bool\n
 	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
 	*/
-	function setDBName($dbname){
+	public function setDBName($dbname{
 		if($dbname==$this->dbname) return false;
 		
 		$this->close();
@@ -57,7 +164,8 @@ class MBDB extends MBClass{
 	*	\return bool\n
 	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
 	*/
-	function close(){
+	public function close()
+	{
 		try{
 			if(@mysql_close($this->linkid)){
 				$this->linkid = 0;
@@ -72,7 +180,8 @@ class MBDB extends MBClass{
 	}
 	
 	// connect-----------------------
-	function connect(){
+	public function connect()
+	{
 		try{
 			if($lk = @mysql_connect($this->host.":".$this->port,$this->user,$this->pass,false)){
 				$this->linkid = $lk; 
@@ -87,7 +196,8 @@ class MBDB extends MBClass{
 	}
 
 // select------------------------	
-	private function selectDB(){
+	private function selectDB()
+	{
 		try{
 			if(@mysql_select_db($this->dbname,$this->linkid)){
 				return true;
@@ -102,7 +212,8 @@ class MBDB extends MBClass{
 	
 	// query -----------------------
 //			if_error = wenn fehlerausgabe erwuenscht (Oeberlagert $this->debug)
-	function query($statement,$if_error=false){
+	public function query($statement,$if_error=false)
+	{
 		if($this->debug==true) $if_error=true;
 		
 		try{
@@ -128,7 +239,8 @@ class MBDB extends MBClass{
 	}
 
 	
-	function fQuery($statement,$if_error=false){
+	public function fQuery($statement,$if_error=false)
+	{
 		if($this->debug==true) $if_error=true;
 		try{
 			if($res = @mysql_query($statement,$this->linkid)){
@@ -149,7 +261,8 @@ class MBDB extends MBClass{
 	
 	}
 	
-	function getLastId(){
+	public function getLastId()
+	{
 		try{
 			if($iid = @mysql_insert_id($this->linkid)){
 				$this->lastid = $iid;
@@ -164,7 +277,8 @@ class MBDB extends MBClass{
 		}
 	}
 
-	function countResult(){
+	public function countResult()
+	{
 		try{
 			if($row = @mysql_fetch_object($this->result)){
 				$this->nrows = $row;
@@ -179,7 +293,8 @@ class MBDB extends MBClass{
 		}
 	}
 	
-	function countRows(){
+	public function countRows()
+	{
 		try{
 			if($row = @mysql_num_rows($this->result)){
 				$this->nrows = $row;
@@ -194,7 +309,8 @@ class MBDB extends MBClass{
 		}
 	}
 
-	function countFields(){
+	public function countFields()
+	{
 		try{
 			if($row = @mysql_num_fields($this->result)){
 				$this->nfield = $row;
@@ -209,7 +325,8 @@ class MBDB extends MBClass{
 		}
 	}
 
-	function move($offset){
+	public function move($offset)
+	{
 		if(($offset<0) || !is_int($offset)) return false;
 		
 		try{
@@ -225,7 +342,8 @@ class MBDB extends MBClass{
 		}
 	}
 	
-	function step(){
+	public function step()
+	{
 		try{
 			if($bol = @mysql_data_seek($this->result,$this->getLastId())){
 				$this->lastid = $this->getLastId();
@@ -240,7 +358,8 @@ class MBDB extends MBClass{
 	
 	}
 
-	function saveFetchArray(){
+	public function saveFetchArray()
+	{
 		try{
 			if($res = @mysql_fetch_array($this->result)){
 				$this->lastid = $this->getLastId();
@@ -256,7 +375,8 @@ class MBDB extends MBClass{
 		}
 	}
 	
-	private function err($e,$sql_text,$statement=""){
+	private function err($e,$sql_text,$statement="")
+	{
 		
 	}
 	
@@ -264,39 +384,48 @@ class MBDB extends MBClass{
 	//wrapper functions for serv_db() statements
 	
 	
-	public function close_db(){
+	public function close_db()
+	{
 		return $this->close();
 	}
 	
-	public function connect_db(){
+	public function connect_db()
+	{
 		return $this->connect();
 	}
 	
-	public function query_db($statement,$if_error=false){
+	public function query_db($statement,$if_error=false)
+	{
 		return $this->query($statement, $if_error);
 	}
 	
-	public function fast_query($statement,$if_error=false){
+	public function fast_query($statement,$if_error=false)
+	{
 		return $this->fQuery($statement, $if_error);
 	}
 	
-	public function get_last_id(){
+	public function get_last_id()
+	{
 		return $this->getLastId();
 	}
 	
-	function count_result(){
+	function count_result()
+	{
 		return $this->countResults();
 	}
 	
-	function count_rows(){
+	function count_rows()
+	{
 		return $this->countRows();
 	}
 	
-	function count_fields(){
+	function count_fields()
+	{
 		return $this->countFields();
 	}
 	
-	function save_fetch_array(){
+	function save_fetch_array()
+	{
 		return $this->saveFetchArray();
 	}
 	
