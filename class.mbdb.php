@@ -22,7 +22,7 @@ class MBDB{
 		$this->dbname = NULL;
 		$this->linkid = NULL;
 		
-		if($acces!=null) $this->setAccessData($access);
+		if($access!=null) $this->setAccessData($access);
 	}
 	
 	public function __destruct(){
