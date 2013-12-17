@@ -38,7 +38,7 @@ class MBDB{
 	*	\return bool\n
 	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
 	*/
-	public function setAccessData($access{
+	public function setAccessData($access){
 		if(($access!=NULL) && (is_array($access))){
 			$chk = 0;
 			if(!array_key_exists('user', $access)) $chk++;
@@ -74,7 +74,7 @@ class MBDB{
 	*/
 	public function setUser($user)
 	{
-		if((!is_string($user)) return false;
+		if(!is_string($user)) return false;
 		$this->user = $user;
 		return true;
 	}
@@ -88,7 +88,7 @@ class MBDB{
 	*/
 	public function setPass($pass)
 	{
-		if((!is_string($pass)) return false;
+		if(!is_string($pass)) return false;
 		$this->pass = $pass;
 		return true;
 	}
@@ -102,7 +102,7 @@ class MBDB{
 	*/
 	public function setHost($host)
 	{
-		if((!is_string($host)) return false;
+		if(!is_string($host)) return false;
 		$this->host = $host;
 		return true;
 	}
@@ -116,7 +116,7 @@ class MBDB{
 	*/
 	public function setDB($db)
 	{
-		if((!is_string($db)) return false;
+		if(!is_string($db)) return false;
 		$this->db = $db;
 		return true;
 	}
