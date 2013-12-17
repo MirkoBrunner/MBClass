@@ -1,7 +1,5 @@
 <?php
 
-require_once('class.mbclass.php');
-
 // Wrapper for standard TCP connections
 class MBDB{
 	private $port;	
@@ -10,10 +8,11 @@ class MBDB{
 	private $pass;	
 	private $dbname;
 	private $linkid;
+	public $debug;
 	
-	public function __construct($access=NULL){
-		parent::__construct();
-		
+	public function __construct($access=NULL)
+	{
+
 		//set to defaults
 		$this->port = 3306;
 		$this->host = "localhost";
@@ -22,11 +21,13 @@ class MBDB{
 		$this->dbname = NULL;
 		$this->linkid = NULL;
 		
+		$this->debug = false;
+		
 		if($access!=null) $this->setAccessData($access);
 	}
 	
-	public function __destruct(){
-		parent::__destruct();
+	public function __destruct()
+	{
 		
 	}
 	
@@ -38,7 +39,8 @@ class MBDB{
 	*	\return bool\n
 	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
 	*/
-	public function setAccessData($access){
+	public function setAccessData($access)
+	{
 		if(($access!=NULL) && (is_array($access))){
 			$chk = 0;
 			if(!array_key_exists('user', $access)) $chk++;
@@ -54,7 +56,7 @@ class MBDB{
 			$this->host =  $access['host'];
 			$this->user = $access['user'];
 			$this->pass = $access['pass'];
-			$this->dn = $access['db'];
+			$this->dbname = $access['db'];
 			
 			if(array_key_exists('port', $access)){
 				$this->port = $access['port'];
@@ -130,7 +132,7 @@ class MBDB{
 	*/
 	public function setPort($port)
 	{
-		if((!is_numeric($port) && (strlen($port)!==4)) return false;
+		if((!is_numeric($port)) && (strlen($port)!==4)) return false;
 		$this->port = $port;
 		return true;
 	}
@@ -143,7 +145,8 @@ class MBDB{
 	*	\return bool\n
 	*	\brief True wenn die Operation erfolgreich war. Ansonten false.
 	*/
-	public function setDBName($dbname{
+	public function setDBName($dbname)
+	{
 		if($dbname==$this->dbname) return false;
 		
 		$this->close();
@@ -183,9 +186,12 @@ class MBDB{
 	public function connect()
 	{
 		try{
-			if($lk = @mysql_connect($this->host.":".$this->port,$this->user,$this->pass,false)){
+			if($lk = mysql_connect($this->host.":".$this->port,$this->user,$this->pass,false)){
 				$this->linkid = $lk; 
-				return true;
+				
+				//try to select stored database
+				return $this->selectDB();
+
 			}else{
 				throw new Exception(mysql_errno());
 			}
@@ -199,7 +205,7 @@ class MBDB{
 	private function selectDB()
 	{
 		try{
-			if(@mysql_select_db($this->dbname,$this->linkid)){
+			if(mysql_select_db($this->dbname,$this->linkid)){
 				return true;
 			}else{
 				throw new Exception(mysql_errno());
