@@ -738,6 +738,17 @@ class MBTimeMath extends MBTimeMathCoreHelper{
 		return 2000+$y;
 		
 	}
+	
+	
+	
+	public function isLeapYear($time){
+		$jahr = date("Y", $time);
+		
+		if((jahr%100 != 0 && jahr%4 == 0) || jahr%400 == 0) {
+			return true;
+		}
+		return false;
+	}
 }
 
 ?>
