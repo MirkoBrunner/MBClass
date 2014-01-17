@@ -740,14 +740,42 @@ class MBTimeMath extends MBTimeMathCoreHelper{
 	}
 	
 	
-	
-	public function isLeapYear($time){
+	/*!	\brief Ermittelt ob es sihc bei dem übergebenen Jahr um ein Schaltjahr handelt.
+	*
+	*	\param $y int Jahr
+	*	\return bool true wenn ein Schaltjahr vorliegt
+	*/
+	public function isLeapYear($time)
+	{
 		$jahr = date("Y", $time);
 		
 		if(($jahr%100 != 0 && $jahr%4 == 0) || $jahr%400 == 0) {
 			return true;
 		}
 		return false;
+	}
+	
+	
+	/*!	\brief Ermittelt alle Tage (Unix Timestamps) des übergebenen Jahres.
+	*
+	*	\param $y int Jahr
+	*	\return array Ermittelte Tage im JAahr als Timestamps
+	*/
+	public function getAllDatesInYear($year)
+	{
+	
+		$startYear = $this->_mktime(0, 0, 0, 1, 1, $year);
+		$endYear = $this->_mktime(12, 59, 59, 12, 31, $year);
+	
+		$days = array();
+	
+		for($i=$startYear-$this->ut_day;$i<$endYear;$i+=$this->ut_day){
+		
+			array_push($days, $i);
+		
+		}
+	
+		return $days;
 	}
 }
 
